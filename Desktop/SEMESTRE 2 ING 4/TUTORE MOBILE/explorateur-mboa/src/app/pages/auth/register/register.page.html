@@ -1,0 +1,124 @@
+<!-- src/app/pages/auth/register/register.page.html -->
+<ion-content class="ion-padding">
+  <div class="auth-container">
+    <!-- Back button -->
+    <ion-buttons slot="start" class="back-button">
+      <ion-button (click)="goToLogin()">
+        <ion-icon name="arrow-back-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+
+    <!-- Header -->
+    <div class="auth-header">
+      <h1>Inscription</h1>
+      <p>Créer votre compte pour continuer</p>
+    </div>
+
+    <!-- Social login options -->
+    <div class="social-login">
+      <ion-button fill="clear" class="social-btn">
+        <img src="assets/icons/google.svg" alt="Google">
+      </ion-button>
+      <ion-button fill="clear" class="social-btn">
+        <img src="assets/icons/facebook.svg" alt="Facebook">
+      </ion-button>
+    </div>
+
+    <!-- Register form -->
+    <form [formGroup]="registerForm" (ngSubmit)="register()">
+      <div class="form-group">
+        <div class="input-container">
+          <ion-icon name="person-outline"></ion-icon>
+          <ion-input 
+            type="text" 
+            placeholder="Nom d'utilisateur" 
+            formControlName="username"
+            class="custom-input"
+            [class.ion-invalid]="registerForm.get('username')?.touched && registerForm.get('username')?.invalid">
+          </ion-input>
+        </div>
+        <div class="error-message" *ngIf="registerForm.get('username')?.touched && registerForm.get('username')?.errors?.['required']">
+          Nom d'utilisateur est requis
+        </div>
+        <div class="error-message" *ngIf="registerForm.get('username')?.touched && registerForm.get('username')?.errors?.['minlength']">
+          Le nom d'utilisateur doit contenir au moins 3 caractères
+        </div>
+      </div>
+
+      <div class="form-group">
+        <div class="input-container">
+          <ion-icon name="mail-outline"></ion-icon>
+          <ion-input 
+            type="email" 
+            placeholder="Email" 
+            formControlName="email"
+            class="custom-input"
+            [class.ion-invalid]="registerForm.get('email')?.touched && registerForm.get('email')?.invalid">
+          </ion-input>
+        </div>
+        <div class="error-message" *ngIf="registerForm.get('email')?.touched && registerForm.get('email')?.errors?.['required']">
+          Email est requis
+        </div>
+        <div class="error-message" *ngIf="registerForm.get('email')?.touched && registerForm.get('email')?.errors?.['email']">
+          Veuillez entrer un email valide
+        </div>
+      </div>
+
+      <div class="form-group">
+        <div class="input-container">
+          <ion-icon name="call-outline"></ion-icon>
+          <ion-input 
+            type="tel" 
+            placeholder="Numéro de téléphone" 
+            formControlName="phoneNumber"
+            class="custom-input"
+            [class.ion-invalid]="registerForm.get('phoneNumber')?.touched && registerForm.get('phoneNumber')?.invalid">
+          </ion-input>
+        </div>
+        <div class="error-message" *ngIf="registerForm.get('phoneNumber')?.touched && registerForm.get('phoneNumber')?.errors?.['pattern']">
+          Veuillez entrer un numéro de téléphone valide (9 chiffres)
+        </div>
+      </div>
+
+      <div class="form-group">
+        <div class="input-container">
+          <ion-icon name="lock-closed-outline"></ion-icon>
+          <ion-input 
+            [type]="passwordVisible ? 'text' : 'password'" 
+            placeholder="Mot de passe" 
+            formControlName="password"
+            class="custom-input"
+            [class.ion-invalid]="registerForm.get('password')?.touched && registerForm.get('password')?.invalid">
+          </ion-input>
+          <ion-button fill="clear" (click)="togglePasswordVisibility()" class="visibility-toggle">
+            <ion-icon [name]="passwordVisible ? 'eye-off-outline' : 'eye-outline'"></ion-icon>
+          </ion-button>
+        </div>
+        <div class="error-message" *ngIf="registerForm.get('password')?.touched && registerForm.get('password')?.errors?.['required']">
+          Mot de passe est requis
+        </div>
+        <div class="error-message" *ngIf="registerForm.get('password')?.touched && registerForm.get('password')?.errors?.['minlength']">
+          Le mot de passe doit contenir au moins 6 caractères
+        </div>
+      </div>
+
+      <!-- Remember me -->
+      <div class="remember-forgot">
+        <div class="remember-me">
+          <ion-checkbox [(ngModel)]="rememberMe" [ngModelOptions]="{standalone: true}"></ion-checkbox>
+          <span>Se souvenir de moi</span>
+        </div>
+      </div>
+
+      <!-- Submit button -->
+      <ion-button expand="block" type="submit" class="register-button" [disabled]="registerForm.invalid">
+        S'inscrire
+      </ion-button>
+    </form>
+
+    <!-- Sign in link -->
+    <div class="sign-in-link">
+      <p>Vous avez déjà un compte ? <a (click)="goToLogin()">connecter vous</a></p>
+    </div>
+  </div>
+</ion-content>

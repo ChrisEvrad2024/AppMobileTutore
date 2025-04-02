@@ -1,0 +1,7 @@
+{
+  "name": "explorateur-mboa",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular-standalone"
+}

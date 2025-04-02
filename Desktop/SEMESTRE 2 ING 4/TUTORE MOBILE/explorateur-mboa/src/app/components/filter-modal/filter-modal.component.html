@@ -1,0 +1,89 @@
+<!-- src/app/components/filter-modal/filter-modal.component.html -->
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Filtres</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="dismiss()">
+        <ion-icon name="close-outline" slot="icon-only"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <div class="filter-section">
+    <h4>Catégorie</h4>
+    <div class="category-filters">
+      <div 
+        class="category-chip" 
+        *ngFor="let category of categories"
+        [class.active]="selectedCategoryFilter === category.id"
+        (click)="selectCategory(category.id)">
+        {{ category.name }}
+      </div>
+    </div>
+  </div>
+
+  <div class="filter-section">
+    <h4>Fonctionnalités</h4>
+    <div class="features-grid">
+      <ion-item lines="none">
+        <ion-label>Réservable</ion-label>
+        <ion-toggle [(ngModel)]="filters.bookable"></ion-toggle>
+      </ion-item>
+      
+      <ion-item lines="none">
+        <ion-label>Transport</ion-label>
+        <ion-toggle [(ngModel)]="filters.transport"></ion-toggle>
+      </ion-item>
+      
+      <ion-item lines="none">
+        <ion-label>Restaurant</ion-label>
+        <ion-toggle [(ngModel)]="filters.restaurant"></ion-toggle>
+      </ion-item>
+      
+      <ion-item lines="none">
+        <ion-label>Stade</ion-label>
+        <ion-toggle [(ngModel)]="filters.stadium"></ion-toggle>
+      </ion-item>
+      
+      <ion-item lines="none">
+        <ion-label>Recommandé</ion-label>
+        <ion-toggle [(ngModel)]="filters.recommand"></ion-toggle>
+      </ion-item>
+    </div>
+  </div>
+
+  <div class="filter-section">
+    <h4>Notation minimale</h4>
+    <div class="rating-filter">
+      <ion-range [(ngModel)]="filters.rating" min="0" max="5" step="0.5" snaps="true">
+        <ion-icon slot="start" name="star-outline"></ion-icon>
+        <ion-icon slot="end" name="star"></ion-icon>
+      </ion-range>
+      <div class="rating-value">{{ filters.rating }} étoiles</div>
+    </div>
+  </div>
+
+  <div class="filter-section">
+    <div class="section-header">
+      <h4>Plage de prix</h4>
+      <div class="price-range-values">
+        {{ filters.priceRange.lower }} XAF - {{ filters.priceRange.upper }} XAF
+      </div>
+    </div>
+    <ion-range [(ngModel)]="filters.priceRange" dual-knobs min="0" max="100000" step="1000">
+      <ion-icon slot="start" name="cash-outline"></ion-icon>
+      <ion-icon slot="end" name="cash"></ion-icon>
+    </ion-range>
+  </div>
+</ion-content>
+
+<ion-footer>
+  <ion-toolbar>
+    <div class="filter-buttons">
+      <ion-button fill="outline" (click)="resetFilters()">Réinitialiser</ion-button>
+      <ion-button (click)="applyFilters()">Appliquer</ion-button>
+    </div>
+  </ion-toolbar>
+</ion-footer>

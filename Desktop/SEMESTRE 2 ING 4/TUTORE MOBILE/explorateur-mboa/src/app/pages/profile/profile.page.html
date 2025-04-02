@@ -1,0 +1,91 @@
+<!-- src/app/pages/profile/profile.page.html -->
+<ion-header class="ion-no-border">
+  <ion-toolbar>
+    <ion-title>Profil</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="goToSettings()">
+        <ion-icon name="settings-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="profile-container">
+    <!-- User header section -->
+    <div class="user-header">
+      <div class="user-avatar">
+        <img [src]="user?.profilePictureUrl || 'assets/images/default-avatar.png'" alt="Profile Picture">
+      </div>
+      <div class="user-info">
+        <h2>{{ user?.username || 'Utilisateur' }}</h2>
+        <p>{{ user?.email }}</p>
+        <div class="user-roles" *ngIf="user?.roles">
+          <ion-badge color="primary" *ngFor="let role of user.roles?.split(' ')">{{ role }}</ion-badge>
+        </div>
+      </div>
+    </div>
+
+    <!-- Profile sections -->
+    <ion-list lines="none">
+      <ion-list-header>
+        <ion-label>Mon compte</ion-label>
+      </ion-list-header>
+
+      <ion-item detail="true" routerLink="/tabs/profile/edit">
+        <ion-icon name="person-outline" slot="start"></ion-icon>
+        <ion-label>Modifier mon profil</ion-label>
+      </ion-item>
+
+      <ion-item detail="true" routerLink="/tabs/profile/favorites">
+        <ion-icon name="heart-outline" slot="start"></ion-icon>
+        <ion-label>Mes favoris</ion-label>
+      </ion-item>
+
+      <ion-item detail="true" *ngIf="user?.roles?.includes('Journaliste')" routerLink="/tabs/profile/my-articles">
+        <ion-icon name="newspaper-outline" slot="start"></ion-icon>
+        <ion-label>Mes articles</ion-label>
+      </ion-item>
+    </ion-list>
+
+    <ion-list lines="none">
+      <ion-list-header>
+        <ion-label>Paramètres</ion-label>
+      </ion-list-header>
+
+      <ion-item detail="true" routerLink="/tabs/profile/language">
+        <ion-icon name="language-outline" slot="start"></ion-icon>
+        <ion-label>Langue</ion-label>
+        <ion-note slot="end">Français</ion-note>
+      </ion-item>
+
+      <ion-item detail="true" routerLink="/tabs/profile/notifications">
+        <ion-icon name="notifications-outline" slot="start"></ion-icon>
+        <ion-label>Notifications</ion-label>
+      </ion-item>
+
+      <ion-item detail="true" routerLink="/tabs/profile/help">
+        <ion-icon name="help-circle-outline" slot="start"></ion-icon>
+        <ion-label>Aide et support</ion-label>
+      </ion-item>
+
+      <ion-item detail="true" routerLink="/tabs/profile/about">
+        <ion-icon name="information-circle-outline" slot="start"></ion-icon>
+        <ion-label>À propos</ion-label>
+      </ion-item>
+    </ion-list>
+
+    <!-- Logout button -->
+    <div class="logout-button-container">
+      <ion-button expand="block" color="danger" fill="outline" (click)="logout()">
+        <ion-icon name="log-out-outline" slot="start"></ion-icon>
+        Déconnexion
+      </ion-button>
+    </div>
+
+    <!-- App version -->
+    <div class="app-version">
+      <p>Version 1.0.0</p>
+    </div>
+  </div>
+</ion-content>

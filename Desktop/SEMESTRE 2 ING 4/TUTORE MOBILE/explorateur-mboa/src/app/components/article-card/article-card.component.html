@@ -1,0 +1,40 @@
+<!-- src/app/components/article-card/article-card.component.html -->
+<div class="article-card" [class.horizontal]="horizontal" (click)="viewArticleDetails()">
+  <div class="article-image">
+    <img [src]="getImageUrl()" [alt]="article.titre">
+    
+    <div class="category-badge" *ngIf="article.rubrique">
+      {{ article.rubrique.nom }}
+    </div>
+    
+    <div class="certification-badge" *ngIf="article.certification">
+      <ion-icon name="checkmark-circle"></ion-icon>
+    </div>
+  </div>
+  
+  <div class="article-info">
+    <div class="article-meta">
+      <div class="article-date" *ngIf="article.date_publication">
+        <ion-icon name="calendar-outline"></ion-icon>
+        <span>{{ formatDate(article.date_publication) }}</span>
+      </div>
+      
+      <div class="article-author" *ngIf="article.createur">
+        <ion-icon name="person-outline"></ion-icon>
+        <span>{{ article.createur }}</span>
+      </div>
+    </div>
+    
+    <div class="article-title">{{ article.titre }}</div>
+    
+    <div class="article-description" *ngIf="article.description && !horizontal">
+      {{ truncateDescription(article.description) }}
+    </div>
+    
+    <div class="article-footer">
+      <div class="read-more">Lire plus</div>
+      
+      <ion-icon name="arrow-forward-outline"></ion-icon>
+    </div>
+  </div>
+</div>

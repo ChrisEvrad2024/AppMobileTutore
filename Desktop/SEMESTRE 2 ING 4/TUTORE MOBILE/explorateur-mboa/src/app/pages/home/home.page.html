@@ -1,0 +1,80 @@
+<!-- src/app/pages/home/home.page.html -->
+<ion-header class="ion-no-border">
+  <ion-toolbar>
+    <div class="header-content">
+      <div class="user-greeting">
+        <h1>Salut, {{ user?.username || 'Explorateur' }}</h1>
+        <p>Explorez le continent</p>
+      </div>
+      <div class="user-avatar">
+        <img [src]="user?.profilePictureUrl || 'assets/images/default-avatar.png'" alt="Avatar">
+      </div>
+    </div>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+  
+  <!-- Search and filter bar -->
+  <app-search-filter 
+    (searchChange)="onSearchChange($event)" 
+    (filterClick)="openFilterModal()">
+  </app-search-filter>
+  
+  <!-- Category filter -->
+  <div class="category-filter">
+    <div 
+      class="category-item" 
+      *ngFor="let category of categories"
+      [class.active]="category.active"
+      (click)="selectCategory(category.id)">
+      <div class="category-icon">
+        <ion-icon [name]="category.icon"></ion-icon>
+      </div>
+      <div class="category-name">{{ category.name }}</div>
+    </div>
+  </div>
+  
+  <!-- Places list -->
+  <div class="places-container">
+    <div class="section-header">
+      <h2>Popular places</h2>
+      <ion-button fill="clear" size="small" routerLink="/tabs/places">
+        Afficher tout
+        <ion-icon name="chevron-forward-outline" slot="end"></ion-icon>
+      </ion-button>
+    </div>
+    
+    <!-- Places grid -->
+    <div class="places-grid">
+      <app-place-card 
+        *ngFor="let place of filteredPlaces"
+        [place]="place">
+      </app-place-card>
+    </div>
+    
+    <!-- Empty state -->
+    <div class="empty-state" *ngIf="filteredPlaces.length === 0 && !loading">
+      <ion-icon name="search"></ion-icon>
+      <h3>Aucun résultat trouvé</h3>
+      <p>Essayez d'autres termes de recherche ou filtres</p>
+    </div>
+    
+    <!-- Loading state -->
+    <div class="loading-container" *ngIf="loading && places.length === 0">
+      <ion-spinner name="crescent"></ion-spinner>
+      <p>Chargement des lieux...</p>
+    </div>
+  </div>
+  
+  <!-- Infinite scroll -->
+  <ion-infinite-scroll (ionInfinite)="loadMorePlaces($event)">
+    <ion-infinite-scroll-content
+      loadingSpinner="bubbles"
+      loadingText="Chargement de plus de lieux...">
+    </ion-infinite-scroll-content>
+  </ion-infinite-scroll>
+</ion-content>

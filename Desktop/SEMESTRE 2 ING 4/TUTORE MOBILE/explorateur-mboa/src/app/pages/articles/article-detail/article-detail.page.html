@@ -1,0 +1,129 @@
+<!-- src/app/pages/articles/article-detail/article-detail.page.html -->
+<ion-header class="ion-no-border" translucent>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/tabs/articles"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Article</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="shareArticle()">
+        <ion-icon name="share-social-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <!-- Loading skeleton -->
+  <div class="skeleton-container" *ngIf="loading">
+    <div class="skeleton-image"></div>
+    <div class="skeleton-header">
+      <div class="skeleton-category"></div>
+      <div class="skeleton-title"></div>
+      <div class="skeleton-meta"></div>
+    </div>
+    <div class="skeleton-content">
+      <div class="skeleton-text"></div>
+      <div class="skeleton-text"></div>
+      <div class="skeleton-text"></div>
+      <div class="skeleton-text"></div>
+    </div>
+  </div>
+
+  <!-- Article content when loaded -->
+  <div class="article-container" *ngIf="!loading">
+    <!-- Article header image -->
+    <div class="article-header-image">
+      <img [src]="getImageUrl()" [alt]="article.titre">
+      
+      <div class="certification-badge" *ngIf="article.certification">
+        <ion-icon name="checkmark-circle"></ion-icon>
+        <span>Certifié</span>
+      </div>
+    </div>
+
+    <div class="article-content">
+      <!-- Category and title -->
+      <div class="article-category" *ngIf="article.rubrique">
+        {{ article.rubrique.nom }}
+      </div>
+      
+      <h1 class="article-title">{{ article.titre }}</h1>
+      
+      <!-- Meta information -->
+      <div class="article-meta">
+        <div class="meta-item" *ngIf="article.date_publication">
+          <ion-icon name="calendar-outline"></ion-icon>
+          <span>{{ formatDate(article.date_publication) }}</span>
+        </div>
+        
+        <div class="meta-item" *ngIf="article.createur">
+          <ion-icon name="person-outline"></ion-icon>
+          <span>{{ article.createur }}</span>
+        </div>
+      </div>
+      
+      <!-- Text size controls -->
+      <div class="text-size-controls">
+        <div class="text-size-label">Taille du texte:</div>
+        <div class="text-size-buttons">
+          <ion-button 
+            fill="clear" 
+            size="small" 
+            [class.active]="textSize === 'small'"
+            (click)="changeTextSize('small')">
+            A
+          </ion-button>
+          <ion-button 
+            fill="clear" 
+            size="small" 
+            [class.active]="textSize === 'medium'"
+            (click)="changeTextSize('medium')">
+            A
+          </ion-button>
+          <ion-button 
+            fill="clear" 
+            size="small" 
+            [class.active]="textSize === 'large'"
+            (click)="changeTextSize('large')">
+            A
+          </ion-button>
+        </div>
+      </div>
+      
+      <!-- Article body -->
+      <div class="article-body" [class]="'text-size-' + textSize">
+        <div class="article-description" [innerHTML]="formattedContent"></div>
+      </div>
+      
+      <!-- Article footer - author info -->
+      <div class="article-footer" *ngIf="article.createur">
+        <div class="author-info">
+          <div class="author-avatar">
+            <ion-icon name="person"></ion-icon>
+          </div>
+          <div class="author-details">
+            <div class="author-name">{{ article.createur }}</div>
+            <div class="author-role">Journaliste</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Related content section -->
+    <div class="related-section">
+      <h2>Articles similaires</h2>
+      <div class="message">
+        <ion-icon name="information-circle-outline"></ion-icon>
+        <p>Les articles similaires ne sont pas encore disponibles.</p>
+      </div>
+    </div>
+  </div>
+</ion-content>
+
+<!-- Share FAB if needed -->
+<ion-fab vertical="bottom" horizontal="end" slot="fixed" *ngIf="!loading">
+  <ion-fab-button (click)="shareArticle()">
+    <ion-icon name="share-social-outline"></ion-icon>
+  </ion-fab-button>
+</ion-fab>

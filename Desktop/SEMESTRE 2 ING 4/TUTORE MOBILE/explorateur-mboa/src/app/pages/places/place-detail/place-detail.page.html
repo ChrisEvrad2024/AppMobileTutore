@@ -1,0 +1,204 @@
+<!-- src/app/pages/places/place-detail/place-detail.page.html -->
+<ion-header class="ion-no-border" translucent>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/tabs/home"></ion-back-button>
+    </ion-buttons>
+    <ion-title>{{ place.nom }}</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="toggleFavorite()">
+        <ion-icon [name]="isFavorite ? 'heart' : 'heart-outline'" [color]="isFavorite ? 'danger' : ''"></ion-icon>
+      </ion-button>
+      <ion-button>
+        <ion-icon name="share-social-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <!-- Loading skeleton -->
+  <div class="skeleton-container" *ngIf="loading">
+    <div class="skeleton-image"></div>
+    <div class="skeleton-info">
+      <div class="skeleton-title"></div>
+      <div class="skeleton-subtitle"></div>
+      <div class="skeleton-rating"></div>
+      <div class="skeleton-description"></div>
+      <div class="skeleton-description"></div>
+    </div>
+  </div>
+
+  <!-- Content when loaded -->
+  <div class="place-detail-container" *ngIf="!loading">
+    <!-- Header image -->
+    <div class="header-image">
+      <img [src]="getImageUrl()" [alt]="place.nom">
+      
+      <div class="location-badge" *ngIf="place.quartier">
+        <ion-icon name="location"></ion-icon>
+        <span>{{ place.quartier.name || 'Yaoundé, Cameroun' }}</span>
+      </div>
+      
+      <ion-badge class="category-badge" *ngIf="place.categorie">
+        {{ place.categorie.nom }}
+      </ion-badge>
+    </div>
+
+    <!-- Basic info -->
+    <div class="place-info">
+      <h1 class="place-name">{{ place.nom }}</h1>
+      
+      <div class="rating-container" *ngIf="place.etoile">
+        <div class="rating">
+          <ion-icon name="star"></ion-icon>
+          <span>{{ place.etoile.toFixed(1) }}</span>
+        </div>
+        <div class="verify-badge" *ngIf="place.verify">
+          <ion-icon name="checkmark-circle"></ion-icon>
+          <span>Vérifié</span>
+        </div>
+      </div>
+      
+      <!-- Address and map -->
+      <div class="address-row" *ngIf="place.adresse" (click)="openMap()">
+        <ion-icon name="map-outline"></ion-icon>
+        <div class="address-text">
+          <p>{{ place.adresse }}</p>
+          <span>Voir sur la carte</span>
+        </div>
+        <ion-icon name="chevron-forward-outline" class="chevron-icon"></ion-icon>
+      </div>
+    </div>
+
+    <!-- Segment for tabs -->
+    <ion-segment [(ngModel)]="activeSegment" (ionChange)="segmentChanged($event)" mode="md">
+      <ion-segment-button value="description">
+        <ion-label>Description</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="services">
+        <ion-label>Services</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="contact">
+        <ion-label>Contact</ion-label>
+      </ion-segment-button>
+    </ion-segment>
+
+    <!-- Segment content -->
+    <div class="segment-content" [ngSwitch]="activeSegment">
+      <!-- Description tab -->
+      <div *ngSwitchCase="'description'" class="description-container">
+        <p class="description-text" *ngIf="place.description">
+          {{ place.description }}
+        </p>
+        
+        <div class="features-grid">
+          <div class="feature-item" *ngIf="place.bookable">
+            <ion-icon name="calendar-outline"></ion-icon>
+            <span>Réservable</span>
+          </div>
+          <div class="feature-item" *ngIf="place.transport">
+            <ion-icon name="car-outline"></ion-icon>
+            <span>Transport</span>
+          </div>
+          <div class="feature-item" *ngIf="place.restaurant">
+            <ion-icon name="restaurant-outline"></ion-icon>
+            <span>Restaurant</span>
+          </div>
+          <div class="feature-item" *ngIf="place.stadium">
+            <ion-icon name="football-outline"></ion-icon>
+            <span>Stade</span>
+          </div>
+          <div class="feature-item" *ngIf="place.recommand">
+            <ion-icon name="thumbs-up-outline"></ion-icon>
+            <span>Recommandé</span>
+          </div>
+        </div>
+        
+        <!-- Price list if available -->
+        <div class="price-list" *ngIf="place.prix && place.prix.length > 0">
+          <h3>Tarifs</h3>
+          <div class="price-item" *ngFor="let price of place.prix">
+            <div class="price-name">{{ price.priceName }}</div>
+            <div class="price-value">{{ formatPrice(price.amount) }} XAF</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Services tab -->
+      <div *ngSwitchCase="'services'" class="services-container">
+        <div class="service-list" *ngIf="place.services && place.services.length > 0; else noServices">
+          <div class="service-item" *ngFor="let service of place.services">
+            <div class="service-header">
+              <h3>{{ service.nom }}</h3>
+              <div class="service-price" *ngIf="service.amount">{{ formatPrice(service.amount) }} XAF</div>
+            </div>
+            <p *ngIf="service.description">{{ service.description }}</p>
+          </div>
+        </div>
+        
+        <ng-template #noServices>
+          <div class="empty-state">
+            <ion-icon name="construct-outline"></ion-icon>
+            <p>Aucun service n'est disponible pour ce lieu.</p>
+          </div>
+        </ng-template>
+      </div>
+
+      <!-- Contact tab -->
+      <div *ngSwitchCase="'contact'" class="contact-container">
+        <div class="contact-list" *ngIf="place.contacts && place.contacts.length > 0; else noContacts">
+          <div class="contact-item" *ngFor="let contact of place.contacts; let i = index">
+            <div class="contact-badge">
+              <div class="badge-text">{{ 'C' + (i + 1) }}</div>
+            </div>
+            
+            <div class="contact-info">
+              <div class="contact-type" *ngIf="contact.tel">
+                <ion-button fill="clear" class="contact-button" (click)="makePhoneCall(contact.tel)">
+                  <ion-icon slot="start" name="call-outline"></ion-icon>
+                  {{ contact.tel }}
+                </ion-button>
+              </div>
+              
+              <div class="contact-type" *ngIf="contact.whatsapp">
+                <ion-button fill="clear" class="contact-button" (click)="openWhatsapp(contact.whatsapp)">
+                  <ion-icon slot="start" name="logo-whatsapp"></ion-icon>
+                  {{ contact.whatsapp }}
+                </ion-button>
+              </div>
+              
+              <div class="contact-type" *ngIf="contact.email">
+                <ion-button fill="clear" class="contact-button" href="mailto:{{ contact.email }}">
+                  <ion-icon slot="start" name="mail-outline"></ion-icon>
+                  {{ contact.email }}
+                </ion-button>
+              </div>
+              
+              <div class="contact-type" *ngIf="contact.url">
+                <ion-button fill="clear" class="contact-button" href="{{ contact.url }}" target="_blank">
+                  <ion-icon slot="start" name="globe-outline"></ion-icon>
+                  Site web
+                </ion-button>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <ng-template #noContacts>
+          <div class="empty-state">
+            <ion-icon name="call-outline"></ion-icon>
+            <p>Aucune information de contact n'est disponible pour ce lieu.</p>
+          </div>
+        </ng-template>
+      </div>
+    </div>
+  </div>
+</ion-content>
+
+<!-- Floating action button for booking if available -->
+<ion-fab vertical="bottom" horizontal="end" slot="fixed" *ngIf="!loading && place.bookable">
+  <ion-fab-button color="primary">
+    <ion-icon name="calendar-outline"></ion-icon>
+  </ion-fab-button>
+</ion-fab>

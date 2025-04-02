@@ -1,0 +1,46 @@
+<!-- src/app/components/place-card/place-card.component.html -->
+<div class="place-card" [class.horizontal]="horizontal" (click)="viewPlaceDetails()">
+  <div class="place-image">
+    <img [src]="getImageUrl()" [alt]="place.nom">
+    <div class="favorite-button" (click)="toggleFavorite($event)">
+      <ion-icon name="heart-outline"></ion-icon>
+    </div>
+  </div>
+  
+  <div class="place-info">
+    <div class="place-location">
+      <ion-icon name="location-outline"></ion-icon>
+      <span>{{ place.quartier?.name || 'Yaoundé, Cameroun' }}</span>
+    </div>
+    
+    <div class="place-name">{{ place.nom }}</div>
+    
+    <div class="place-rating" *ngIf="place.etoile">
+      <ion-icon name="star"></ion-icon>
+      <span>{{ place.etoile.toFixed(1) }}</span>
+    </div>
+    
+    <div class="place-description" *ngIf="showDetails && place.description">
+      {{ truncateDescription(place.description) }}
+    </div>
+    
+    <div class="place-features" *ngIf="showDetails">
+      <div class="feature" *ngIf="place.bookable">
+        <ion-icon name="calendar-outline"></ion-icon>
+        <span>Réservable</span>
+      </div>
+      <div class="feature" *ngIf="place.transport">
+        <ion-icon name="car-outline"></ion-icon>
+        <span>Transport</span>
+      </div>
+      <div class="feature" *ngIf="place.restaurant">
+        <ion-icon name="restaurant-outline"></ion-icon>
+        <span>Restaurant</span>
+      </div>
+      <div class="feature" *ngIf="place.stadium">
+        <ion-icon name="football-outline"></ion-icon>
+        <span>Stade</span>
+      </div>
+    </div>
+  </div>
+</div>

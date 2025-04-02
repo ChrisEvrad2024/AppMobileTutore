@@ -1,0 +1,70 @@
+<!-- src/app/pages/articles/article-list/article-list.page.html -->
+<ion-header class="ion-no-border">
+  <ion-toolbar>
+    <ion-title>Articles</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+  
+  <!-- Search bar -->
+  <div class="search-container">
+    <ion-searchbar 
+      placeholder="Rechercher des articles" 
+      [(ngModel)]="searchTerm"
+      (ionChange)="onSearchChange($event)"
+      animated="true"
+      showCancelButton="focus">
+    </ion-searchbar>
+  </div>
+  
+  <!-- Category filter -->
+  <div class="category-filter">
+    <div 
+      class="category-item" 
+      *ngFor="let category of categories"
+      [class.active]="category.active"
+      (click)="selectCategory(category.id)">
+      {{ category.name }}
+    </div>
+  </div>
+  
+  <!-- Articles list -->
+  <div class="articles-container">
+    <app-article-card 
+      *ngFor="let article of filteredArticles"
+      [article]="article">
+    </app-article-card>
+    
+    <!-- Empty state -->
+    <div class="empty-state" *ngIf="filteredArticles.length === 0 && !loading">
+      <ion-icon name="document-text-outline"></ion-icon>
+      <h3>Aucun article trouvé</h3>
+      <p>Essayez d'autres termes de recherche ou filtres</p>
+    </div>
+    
+    <!-- Loading skeleton -->
+    <div class="skeleton-container" *ngIf="loading">
+      <div class="skeleton-card" *ngFor="let i of [1, 2, 3]">
+        <div class="skeleton-image"></div>
+        <div class="skeleton-content">
+          <div class="skeleton-title"></div>
+          <div class="skeleton-meta"></div>
+          <div class="skeleton-text"></div>
+          <div class="skeleton-text"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Infinite scroll -->
+  <ion-infinite-scroll (ionInfinite)="loadMoreArticles($event)">
+    <ion-infinite-scroll-content
+      loadingSpinner="bubbles"
+      loadingText="Chargement de plus d'articles...">
+    </ion-infinite-scroll-content>
+  </ion-infinite-scroll>
+</ion-content>

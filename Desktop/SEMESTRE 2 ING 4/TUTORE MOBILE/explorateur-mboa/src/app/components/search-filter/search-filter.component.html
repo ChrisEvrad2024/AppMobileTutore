@@ -1,0 +1,24 @@
+<!-- src/app/components/search-filter/search-filter.component.html -->
+<div class="search-filter-container">
+  <div class="search-bar" [class.focused]="isSearchFocused">
+    <ion-icon name="search-outline"></ion-icon>
+    <input 
+      type="text" 
+      placeholder="Search places" 
+      [(ngModel)]="searchTerm" 
+      (input)="onSearchChange()"
+      (focus)="onSearchFocus()"
+      (blur)="onSearchBlur()">
+    <ion-button 
+      fill="clear" 
+      class="clear-button" 
+      *ngIf="searchTerm"
+      (click)="clearSearch()">
+      <ion-icon name="close-circle"></ion-icon>
+    </ion-button>
+  </div>
+  
+  <ion-button class="filter-button" fill="clear" (click)="openFilters()">
+    <ion-icon name="options-outline"></ion-icon>
+  </ion-button>
+</div>

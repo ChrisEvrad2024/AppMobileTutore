@@ -1,0 +1,136 @@
+/* src/app/pages/profile/profile.page.scss */
+ion-header {
+    ion-toolbar {
+      --background: transparent;
+      
+      ion-title {
+        font-size: 20px;
+        font-weight: 600;
+      }
+    }
+  }
+  
+  .profile-container {
+    padding: 16px;
+  }
+  
+  .user-header {
+    display: flex;
+    align-items: center;
+    padding: 16px;
+    background-color: white;
+    border-radius: 16px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+    margin-bottom: 24px;
+    
+    .user-avatar {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      overflow: hidden;
+      margin-right: 16px;
+      
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+    }
+    
+    .user-info {
+      flex: 1;
+      
+      h2 {
+        font-size: 20px;
+        font-weight: 600;
+        color: var(--ion-color-dark);
+        margin: 0 0 4px;
+      }
+      
+      p {
+        font-size: 14px;
+        color: var(--ion-color-medium);
+        margin: 0 0 10px;
+      }
+      
+      .user-roles {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+        
+        ion-badge {
+          font-size: 10px;
+          font-weight: 500;
+          padding: 4px 8px;
+          border-radius: 10px;
+        }
+      }
+    }
+  }
+  
+  ion-list {
+    background-color: white;
+    border-radius: 16px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+    margin-bottom: 24px;
+    padding: 8px 0;
+    
+    ion-list-header {
+      padding-top: 8px;
+      padding-bottom: 8px;
+      
+      ion-label {
+        font-size: 16px;
+        font-weight: 600;
+        color: var(--ion-color-dark);
+        opacity: 1;
+      }
+    }
+    
+    ion-item {
+      --padding-start: 16px;
+      --padding-end: 16px;
+      --inner-padding-end: 16px;
+      
+      ion-icon {
+        color: var(--ion-color-primary);
+        font-size: 22px;
+        margin-right: 16px;
+      }
+      
+      ion-label {
+        font-size: 15px;
+        color: var(--ion-color-dark-shade);
+      }
+      
+      ion-note {
+        font-size: 13px;
+        color: var(--ion-color-medium);
+        font-weight: 500;
+      }
+    }
+  }
+  
+  .logout-button-container {
+    margin-bottom: 24px;
+    
+    ion-button {
+      height: 48px;
+      --border-width: 1px;
+      font-weight: 500;
+      
+      ion-icon {
+        margin-right: 8px;
+      }
+    }
+  }
+  
+  .app-version {
+    text-align: center;
+    
+    p {
+      font-size: 12px;
+      color: var(--ion-color-medium);
+      margin: 0;
+    }
+  }

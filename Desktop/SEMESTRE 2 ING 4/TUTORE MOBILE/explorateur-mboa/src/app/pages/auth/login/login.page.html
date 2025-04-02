@@ -1,0 +1,90 @@
+<!-- src/app/pages/auth/login/login.page.html -->
+<ion-content class="ion-padding">
+  <div class="auth-container">
+    <!-- Back button -->
+    <ion-buttons slot="start" class="back-button">
+      <ion-button>
+        <ion-icon name="arrow-back-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+
+    <!-- Header -->
+    <div class="auth-header">
+      <h1>Connexion</h1>
+      <p>Heureux de vous revoir</p>
+    </div>
+
+    <!-- Social login options -->
+    <div class="social-login">
+      <ion-button fill="clear" class="social-btn">
+        <img src="assets/icons/google.svg" alt="Google">
+      </ion-button>
+      <ion-button fill="clear" class="social-btn">
+        <img src="assets/icons/facebook.svg" alt="Facebook">
+      </ion-button>
+    </div>
+
+    <!-- Login form -->
+    <form [formGroup]="loginForm" (ngSubmit)="login()">
+      <div class="form-group">
+        <div class="input-container">
+          <ion-icon name="mail-outline"></ion-icon>
+          <ion-input 
+            type="email" 
+            placeholder="Email" 
+            formControlName="username"
+            class="custom-input"
+            [class.ion-invalid]="loginForm.get('username')?.touched && loginForm.get('username')?.invalid">
+          </ion-input>
+        </div>
+        <div class="error-message" *ngIf="loginForm.get('username')?.touched && loginForm.get('username')?.errors?.['required']">
+          Email est requis
+        </div>
+        <div class="error-message" *ngIf="loginForm.get('username')?.touched && loginForm.get('username')?.errors?.['email']">
+          Veuillez entrer un email valide
+        </div>
+      </div>
+
+      <div class="form-group">
+        <div class="input-container">
+          <ion-icon name="lock-closed-outline"></ion-icon>
+          <ion-input 
+            [type]="passwordVisible ? 'text' : 'password'" 
+            placeholder="Mot de passe" 
+            formControlName="password"
+            class="custom-input"
+            [class.ion-invalid]="loginForm.get('password')?.touched && loginForm.get('password')?.invalid">
+          </ion-input>
+          <ion-button fill="clear" (click)="togglePasswordVisibility()" class="visibility-toggle">
+            <ion-icon [name]="passwordVisible ? 'eye-off-outline' : 'eye-outline'"></ion-icon>
+          </ion-button>
+        </div>
+        <div class="error-message" *ngIf="loginForm.get('password')?.touched && loginForm.get('password')?.errors?.['required']">
+          Mot de passe est requis
+        </div>
+        <div class="error-message" *ngIf="loginForm.get('password')?.touched && loginForm.get('password')?.errors?.['minlength']">
+          Le mot de passe doit contenir au moins 6 caractères
+        </div>
+      </div>
+
+      <!-- Remember me and forgot password -->
+      <div class="remember-forgot">
+        <div class="remember-me">
+          <ion-checkbox [(ngModel)]="rememberMe" [ngModelOptions]="{standalone: true}"></ion-checkbox>
+          <span>Se souvenir de moi</span>
+        </div>
+        <a href="#" class="forgot-password">Mot de passe oublié ?</a>
+      </div>
+
+      <!-- Submit button -->
+      <ion-button expand="block" type="submit" class="login-button" [disabled]="loginForm.invalid">
+        Se connecter
+      </ion-button>
+    </form>
+
+    <!-- Sign up link -->
+    <div class="sign-up-link">
+      <p>Vous n'avez pas de compte? <a (click)="goToRegister()">Inscrivez-vous</a></p>
+    </div>
+  </div>
+</ion-content>
